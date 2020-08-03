@@ -1,0 +1,593 @@
+//暂无数据
+.no_data {
+  color: #e5e9f2;
+  font-size: 20px;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.flex-row {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: flex;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+  align-items: center;
+  -webkit-flex-wrap: wrap;
+  flex-wrap: wrap;
+}
+
+.flex-column {
+  width: 100%;
+  height: 100%;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: flex;
+  flex-direction: column;
+}
+
+.flex-wrp {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: flex;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+  align-items: center;
+}
+
+.flex-item {
+  -webkit-box-flex: 1;
+  -webkit-flex: 1;
+  flex: 1;
+}
+
+.fl {
+  float: left;
+}
+
+.fr {
+  float: right;
+}
+
+.setting_button_bg {
+  margin-top: 15px;
+  .setting_button_tag {
+    padding: 0px 10px;
+    line-height: 29px;
+    box-sizing: border-box;
+    border-radius: 5px;
+    margin-right: 26px;
+    color: rgba(51, 51, 51, 1);
+    display: inline-block;
+    cursor: pointer;
+    color: #fff;
+    i {
+      font-size: 12px;
+      vertical-align: middle;
+      margin-right: 6px;
+
+    }
+    span {
+      vertical-align: middle;
+    }
+  }
+  .button_add {
+    background: #0680FD;
+  }
+  .button_delete {
+    background: #FF5253;
+  }
+  .button_edit {
+    background: #67C23A;
+  }
+
+}
+
+.search_bg_wrap {
+  position: relative;
+  .search-box {
+    margin-top: 15px;
+    padding: 10px;
+    border: 1px solid #DEDEDE;
+    border-radius: 4px;
+    p {
+      display: flex;
+      padding-bottom: 5px;
+      padding-right: 20px;
+      width: 22.5%;
+      box-sizing: border-box;
+      .search_hint {
+        display: inline-block;
+        line-height: 30px;
+        color: #333333;
+        margin-right: 5px;
+        width: 80px;
+      }
+      .el-input {
+        flex: 1;
+        width: 100%;
+
+      }
+      .el-date-editor, .el-cascader {
+        flex: 1;
+      }
+      .el-select {
+        flex: 1;
+        .el-input {
+          width: 100%;
+        }
+      }
+    }
+  }
+
+  .el-button {
+    margin-bottom: 5px;
+  }
+  .el-button--warning {
+    background: #F67A16;
+    border-color: #F67A16;
+    padding: 5px 10px;
+    vertical-align: middle;
+    i {
+      margin-right: 5px;
+    }
+  }
+  .el-button--success {
+    padding: 7px 12px;
+    vertical-align: middle;
+    i {
+      margin-right: 5px;
+    }
+  }
+}
+
+@media screen and (max-width: 1500px) {
+  .search_bg_wrap {
+    .search-box {
+      p {
+        width: 33.33%;
+      }
+    }
+  }
+}
+
+@media screen and (max-width: 1200px) {
+  .search_bg_wrap {
+    .search-box {
+      p {
+        width: 50%;
+      }
+    }
+  }
+}
+
+@media screen and (max-width: 960px) {
+  .search_bg_wrap {
+    .search-box {
+      p {
+        width: 100%;
+      }
+      .el-button {
+        margin: 10px auto;
+      }
+    }
+  }
+}
+
+.el-button--warning {
+  background: #F67A16;
+  border-color: #F67A16;
+  padding: 5px 10px;
+  vertical-align: middle;
+  i {
+    margin-right: 5px;
+  }
+}
+
+.el-button--success {
+  padding: 7px 12px;
+  vertical-align: middle;
+  i {
+    margin-right: 5px;
+  }
+}
+
+.opr-search-btn {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  width: 60px;
+  height: 30px;
+  line-height: 30px;
+  text-align: center;
+  box-sizing: border-box;
+  .icon-shouqi2 {
+    padding-left: 3px;
+    font-size: 8px;
+  }
+}
+
+.opr-search-btn.search-btn {
+  position: fixed;
+  top: 60px;
+  right: 20px;
+  padding: 0 10px;
+  border-radius: 4px;
+  z-index: 100;
+  background: #F5F7FA;
+  .icon-zhankai1 {
+    padding-left: 3px;
+    font-size: 8px;
+  }
+}
+
+.text_overflow {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+/*
+.search_header {
+  .hint {
+    color: #333;
+    margin-right: 15px;
+    font-weight: 600;
+  }
+  .button_wrap {
+    //float: right;
+    margin-left: 20px;
+    display: inline-block;
+    height: 100%;
+
+  }
+}
+*/
+
+.wrap_main {
+  margin-top: 15px;
+  overflow: auto;
+}
+
+/*.setting_button {
+  color: #2174C7;
+  text-align: left;
+  margin-bottom: 5px;
+  padding-left: 20px;
+  span {
+    cursor: pointer;
+  }
+}*/
+
+.table_setting_button {
+  .el-button--mini, .el-button--mini.is-round {
+    padding: 6px 10px;
+    border-radius: 5px;
+  }
+  .el-button + .el-button {
+    margin-left: 6px;
+  }
+}
+
+.prohibit_setting_button_tag {
+  color: #bcbec2 !important;
+  background-color: #f4f4f5 !important;
+  border: 1px solid #e9e9eb;
+  cursor: not-allowed !important;
+  .icon-add-fill {
+    color: #bcbec2;
+  }
+}
+
+.prohibit_setting_button_tag:hover {
+  border-color: #e9e9eb;
+  color: #bcbec2;
+  .icon-add-fill {
+    color: #bcbec2;
+  }
+}
+
+//导航栏
+.dialog_nav {
+  font-size: 14px;
+  color: #333333;
+  font-weight: bold;
+  margin-bottom: 10px;
+  .nav_line {
+    display: inline-block;
+    width: 3px;
+    height: 13px;
+    background: #0680FD;
+    margin-right: 6px;
+  }
+  span {
+    vertical-align: middle;
+  }
+}
+
+/*cms中新增元素按钮的样式*/
+.cms_dialog_add_button {
+  background: #fff;
+  border-radius: 5px;
+  padding: 0px 9px;
+  line-height: 30px;
+  display: inline-block;
+  margin-bottom: 15px;
+  border: 1px solid #DEDEDE;
+  color: #333333;
+  cursor: pointer;
+  i {
+    font-size: 16px;
+    vertical-align: middle;
+    color: #0680FD;
+  }
+  span {
+    vertical-align: middle;
+  }
+}
+
+/*cms模块中的dialog的全局样式*/
+.cms_dialog_visible {
+  .el-dialog {
+    border-radius: 10px;
+    //padding-bottom: 30px;
+    max-height: 745px;
+  }
+  .el-dialog__header {
+    padding: 8px 20px;
+    background: #f5f7fa;
+    box-sizing: border-box;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    .el-dialog__title {
+      font-size: 14px;
+      color: #333;
+      font-weight: bold;
+    }
+    .el-dialog__close {
+      color: #666666;
+    }
+  }
+  .el-dialog__headerbtn {
+    top: 12px
+  }
+
+  /*cms中中间块的样式*/
+  .el-dialog__body {
+    overflow-y: auto;
+    // overflow-x: hidden;
+    padding: 13px 20px 0px;
+    box-sizing: border-box;
+    font-size: 12px;
+    color: #333;
+    .floor_setting {
+      color: #0680FD;
+      margin-bottom: 10px;
+      font-weight: bold;
+      font-size: 16px;
+    }
+    .cms_dialog_content {
+      border-radius: 10px;
+      border: 1px solid #ECEFF6;
+      padding: 10px 20px 20px;
+      margin-bottom: 20px;
+      box-sizing: border-box;
+      position: relative;
+      .cms_del_icon {
+        position: absolute;
+        top: -10px;
+        right: -10px;
+        cursor: pointer;
+      }
+      /*必填的*样式*/
+      .required_field {
+        color: red;
+        vertical-align: middle;
+        margin-right: 5px;
+      }
+
+    }
+    .search_bg_wrap {
+      line-height: 35px;
+    }
+    .setting_input_wrap {
+      margin-top: 20px;
+    }
+    .setting_item_title {
+      display: inline-block;
+      width: 90px;
+      color: #333333;
+    }
+    .setting_item_title2 {
+      margin-right: 20px;
+      margin-left: 60px;
+      display: inline-block;
+      color: #333;
+    }
+    .setting_item_hint {
+      color: #999999;
+      margin-left: 15px;
+    }
+    .query_button {
+      display: inline-block;
+      border: 1px solid #F67A16;
+      border-radius: 5px;
+      text-align: center;
+      padding: 0px 10px;
+      height: 30px;
+      line-height: 28px;
+      margin-left: 15px;
+      box-sizing: border-box;
+      cursor: pointer;
+      background: #F67A16;
+      color: #fff;
+      i {
+        font-size: 14px;
+        margin-right: 3px;
+      }
+    }
+  }
+  /*
+  .submit_data {
+    width: 119px;
+    height: 40px;
+    background: #0680FD;
+    border-radius: 5px;
+    text-align: center;
+    line-height: 40px;
+    margin: 0px auto;
+    color: #fff;
+    cursor: pointer;
+  }
+  */
+
+  .el-dialog__footer {
+    background: #f5f7fa;
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+    padding: 7px 20px;
+    .el-button {
+      padding: 8px 28px;
+    }
+  }
+  //自定义的dialog底部
+  .dialog-footer-bg {
+    display: inline-block;
+    width: 100%;
+    background: #f5f7fa;
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+    padding: 7px 20px;
+    box-sizing: border-box;
+    text-align: right;
+    .el-button {
+      padding: 8px 28px;
+    }
+  }
+}
+
+//dialog标题下面和结尾下面没有下划线的
+.setting_dialog {
+  .el-dialog {
+    padding-bottom: 1px;
+  }
+  .el-dialog__body {
+    border-bottom: initial;
+  }
+  .el-dialog__header {
+    border-bottom: initial !important;
+  }
+}
+
+//提示框中的按钮样式
+.el-message-box {
+  .el-button--primary {
+    background-color: #0680FD;
+    border-color: #0680FD;
+  }
+}
+
+.dialog-footer_button {
+  text-align: center;
+  margin: 30px 0px;
+}
+
+//dialog中的按钮样式
+/*.from_button {
+  width: 120px;
+  height: 40px;
+  line-height: 40px;
+  text-align: center;
+  border-radius: 5px;
+  display: inline-block;
+  margin-top: 10px;
+  cursor: pointer;
+}
+
+.from_button_default {
+  border: 1px solid #CBCCCC;
+  color: #666666;
+  box-sizing: border-box;
+  margin-right: 68px;
+}
+
+.from_button_setting {
+  background: #0680FD;
+  color: #fff;
+}*/
+
+.tab_bg {
+  margin-top: 10px;
+  height: 30px;
+  .switch_tab {
+    text-align: center;
+    border: 1px solid #DEDEDE;
+    padding: 2px 16px;
+    box-sizing: border-box;
+    float: left;
+    color: #666666;
+    cursor: pointer;
+  }
+  .switch_tab:first-child {
+    border-right: 0px;
+  }
+  .switch_tab:last-child {
+    border-left: 0px;
+  }
+  .tab_active {
+    background: #0680fd;
+    color: #fff;
+    border-color: #0680fd;
+  }
+}
+
+//table表格里的查看按钮
+.look_info {
+  cursor: pointer;
+  display: inline-block;
+  border: 1px solid #E5E6E7;
+  padding: 0px 8px;
+  border-radius: 5px;
+  background: #F4F4F5;
+  margin-left: 5px;
+}
+
+legend {
+  padding: 0 22px;
+  font-size: 14px;
+}
+
+//商品维护中的添加商品 示例图的el-popover样式
+.setting_popover_style {
+  /* top: 155px !important;
+   .popper__arrow {
+     top: 300px !important;
+   }*/
+}
+
+.tooltip_setting {
+  min-width: 400px;
+  line-height: 18px;
+  font-size: 12px;
+  .tooltip_setting_content {
+    line-height: 22px;
+
+    span {
+      float: right;
+      cursor: pointer;
+    }
+  }
+}
+
+.add_user .el-dialog {
+  max-height: initial !important;
+}
+
+.opacity_img {
+  position: absolute;
+  .el-image__preview, .el-image__error, .el-image__placeholder {
+    opacity: 0;
+  }
+}
