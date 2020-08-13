@@ -8,24 +8,6 @@
       :close-on-click-modal="false"
       :before-close="clearFormData">
       <el-form :model="formData" :rules="rules" ref="ruleForm" label-width=" 100px" class="edit-customer-form">
-        <fieldset class="cms_dialog_content" style="padding:8px 20px 0px">
-          <legend>专题信息</legend>
-          <el-row>
-            <el-col :span="11">
-              <el-form-item label="应用类型" class="flex-item" prop="activityType">
-                <el-checkbox-group v-model="formData.activityType"  @change="handleCheckedChange">
-                  <el-checkbox v-for="type in activityTypes" :label="type.label" :key="type.id">{{type.label}}</el-checkbox>
-                </el-checkbox-group>
-              </el-form-item>
-            </el-col>
-          </el-row>
-          <el-row>
-            <el-col :span="12">
-              <el-form-item label="专题名称" class="flex-item" prop="activityName">
-                <el-input v-model.trim="formData.activityName" size="small"  maxlength="20" show-word-limit clearable></el-input>
-              </el-form-item>
-            </el-col>
-          </el-row>
           <el-row>
             <el-col :span="12">
               <el-form-item label="活动时间" autofocus class="flex-item" prop="activeTime">
@@ -41,123 +23,65 @@
               </el-form-item>
             </el-col>
           </el-row>
-        </fieldset>
-        <fieldset class="cms_dialog_content">
-          <legend>页面配置</legend>
-          <el-row>
-            <el-col :span="24" v-if="isUploadHeadImg">
-              <el-form-item label="PC头部宣传图" autofocus class="flex-item" prop="headImg">
-                <el-upload
-                  class="avatar-uploader"
-                  :action="uploadUrl"
-                  :show-file-list="false"
-                  :on-success="(res,file)=>{return handleAvatarSuccess(res,file,'header')}"
-                  :headers="uploadHeaders"
-                  :data="{size:300}"
-                  :before-upload="beforeAvatarUpload">
-                  <img  class="avatar" :src="formData.headImg" v-if="formData.headImg">
-                  <i class="el-icon-plus avatar-uploader-icon" v-else></i>
-                </el-upload>
-                <span class="tips red">图片尺寸：1920px*500px    图片大小：300kb以内</span>
-              </el-form-item>
-            </el-col>
-
-            <el-col :span="24" v-if="isUploadAppHeadImg">
-              <el-form-item label="APP头部宣传图" autofocus class="flex-item" prop="appHeadImg">
-                <el-upload
-                  class="avatar-uploader app-avatar-uploader"
-                  :action="uploadUrl"
-                  :show-file-list="false"
-                  :on-success="(res,file)=>{return handleAvatarSuccess(res,file,'appheader')}"
-                  :headers="uploadHeaders"
-                  :data="{size:300}"
-                  :before-upload="beforeAvatarUpload2">
-                  <img  class="avatar" :src="formData.appHeadImg" v-if="formData.appHeadImg">
-                  <i class="el-icon-plus avatar-uploader-icon" v-else></i>
-                </el-upload>
-                <span class="tips red">图片尺寸：750px*424px    图片大小：300kb以内</span>
-              </el-form-item>
-            </el-col>
-            <el-col :span="24" >
-              <el-form-item label="页面背景色" autofocus class="flex-item color-item" prop="backgroundColor">
-                <el-color-picker v-model="formData.backgroundColor" class="reset-color-picker"></el-color-picker>
-                <el-input v-model="formData.backgroundColor" size="mini" clearable maxlength="7"></el-input>
-                <span class="tips">请填写16进制颜色，例如#2f9ffe</span>
-              </el-form-item>
-            </el-col>
-          </el-row>
-        </fieldset>
-        <fieldset class="cms_dialog_content" style="padding:8px 20px 0px">
-          <legend>商品配置</legend>
-          <div class="info-list">
-            <div class="commodity_data_setting" style="float:left">
-              <div class="add_commodity_button" @click="openAddCommodityDialog">新增商品</div>
+        <el-row>
+        <div class="commodity_data_setting" style="float:left">
+              <div class="add_commodity_button" @click="openAddCommodityDialog">添加商品</div>
               <div class="del_commodity_button" @click="deleteCommodity">删除</div>
             </div>
-            <div class="search_bg_wrap" style="float:right">
-              <el-select  style="width: 120px;margin-right:15px" v-model="filters.status" placeholder="商品状态" size="mini" @change="addSearchCommodityList">
-                <el-option label="全部" :key=" " value=""></el-option>
-                <el-option  v-for="item in statusList"
-                  :key="item.value"
-                  :label="item.label"
-                  :value="item.value"></el-option>
-              </el-select>
-              <el-input v-model="filters.searchParam" clearable placeholder="编码/商品名/通用名"
-                          style="width: 240px;margin-right:15px" size="small" @keyup.enter.native="addSearchCommodityList"
-                ></el-input>
-                <el-input v-model="filters.supplierName" clearable placeholder="供应商"
-                          style="width: 240px;margin-right:15px" size="small" @keyup.enter.native="addSearchCommodityList"
-                ></el-input>
-                <el-button size="small" type="warning" @click="addSearchCommodityList"><i class="iconfont icon-chaxun"></i>查询
-                </el-button>
-            </div>
-            <el-table
-              ref="multipleTable"
-              :data="editCommodityData.data.slice((editCommodityData.currentPage-1)*editCommodityData.pageSize,editCommodityData.currentPage*editCommodityData.pageSize)"
-              style="width: 100%"
-              border stripe
-              :row-key="getRowKeys"
-              @row-click="rowClick"
-              @selection-change="handleSelectionChange"
-              @sort-change="tableDataSortChange"
-              :default-sort = "{prop: 'drugSkuCode', order: 'desc'}">
-              <el-table-column type="selection" width="45" align="center" :reserve-selection="true"></el-table-column>
-              <el-table-column label="商品状态" prop="status">
-                <template slot-scope="scope">
-                  <!-- 1上架   0和2下架 -->
-                   {{scope.row.status ==1?'已上架':'已下架'}}
-                </template>
-              </el-table-column>
-              <el-table-column label="商品编码" prop="drugSkuCode" sortable width="120px"></el-table-column>
-              <el-table-column label="商品通用名" prop="drugCommonName" sortable width="120px"></el-table-column>
-              <el-table-column label="规格/单位" prop="specifications" width="120px">
-                <template slot-scope="scope">{{scope.row.specifications}}/ {{scope.row.packageUnit}}</template>
-              </el-table-column>
-              <el-table-column label="厂家" prop="manufacturer" sortable width="120px"></el-table-column>
-              <el-table-column label="中/大包装-可拆零" prop="" width="130px">
-                <template slot-scope="scope">
-                  {{scope.row.mediumPackage}}/{{scope.row.largePackage}}- {{scope.row.isRetail==0?'不可拆零':scope.row.isRetail==1?'可拆零':''}}
-                </template>
-              </el-table-column>
-              <el-table-column label="批号" prop="productionBatch" width="120px"></el-table-column>
-              <el-table-column label="效期" prop="dateExpiration" sortable width="80px"></el-table-column>
-              <el-table-column label="供应商报价" prop="supplierPrice" sortable width="120px"></el-table-column>
-              <el-table-column label="库存" prop="repertory"></el-table-column>
-              <el-table-column label="所属供应商" prop="supplierName" sortable width="120px">
-              </el-table-column>
-            </el-table>
-            <div class="setting_pagination" v-if="editCommodityData.total>0">
-              <el-pagination @current-change="handleCurrentChange"
-                            @size-change="handleSizeChange"
-                            layout="total, sizes, prev, pager, next, jumper"
-                            :page-sizes="[10, 50, 100, 150]"
-                            small
-                            :total="editCommodityData.total" :current-page.sync="editCommodityData.currentPage"
-                            :page-size="editCommodityData.pageSize"></el-pagination>
-              <el-button type="primary" size="mini" plain>确 定</el-button>
-            </div>
-          </div>
-        </fieldset>
+        </el-row>
+        <div class="flex-row">
+          <el-form-item label="供应商编码" prop="drugName">
+            <el-input v-model="formData.goodsSn" clearable :disabled="review" size="small"></el-input>
+          </el-form-item>
+          <el-form-item label="商品名" prop="drugCommonName">
+            <el-input v-model="formData.drugName" clearable size="small"></el-input>
+          </el-form-item>
+          <el-form-item label="通用名" prop="manufacturer">
+            <el-input v-model="formData.drugCommonName" clearable :disabled="review" size="small"></el-input>
+          </el-form-item>
+          <el-form-item label="厂家" prop="manufacturer">
+            <el-input v-model="formData.manufacturer" clearable :disabled="review" size="small"></el-input>
+          </el-form-item>
+          <el-form-item>
+            <el-button size="small" type="warning" @click="addSearchCommodityList"><i class="iconfont icon-chaxun"></i>查询
+            </el-button>
+          </el-form-item>
+        </div>
+        <el-table
+          ref="multipleTable"
+          :data="editCommodityData.data.slice((editCommodityData.currentPage-1)*editCommodityData.pageSize,editCommodityData.currentPage*editCommodityData.pageSize)"
+          style="width: 100%"
+          border stripe
+          :row-key="getRowKeys"
+          @row-click="rowClick"
+          @selection-change="handleSelectionChange"
+          @sort-change="tableDataSortChange"
+          :default-sort = "{prop: 'drugSkuCode', order: 'desc'}">
+          <el-table-column type="selection" width="45" align="center" :reserve-selection="true"></el-table-column>
+          <el-table-column label="供应商编码" prop="goodsSn" sortable width="120px"></el-table-column>
+          <el-table-column label="商品名称" prop="drugName" sortable width="120px"></el-table-column>
+          <el-table-column label="规格/单位" prop="specifications" width="120px">
+            <template slot-scope="scope">{{scope.row.specifications}}/ {{scope.row.packageUnit}}</template>
+          </el-table-column>
+          <el-table-column label="中/大包装" prop="" width="130px">
+            <template slot-scope="scope">
+              {{scope.row.mediumPackage}}/{{scope.row.largePackage}}
+            </template>
+          </el-table-column>
+          <el-table-column prop="drugName" label="最低起定量" width="100px"></el-table-column>
+          <el-table-column prop="drugName" label="最高购买数量" width="120px"></el-table-column>
+          <el-table-column label="厂家" prop="manufacturer" sortable width="120px"></el-table-column>
+        </el-table>
+        <div class="setting_pagination" v-if="editCommodityData.total>0">
+          <el-pagination @current-change="handleCurrentChange"
+                         @size-change="handleSizeChange"
+                         layout="total, sizes, prev, pager, next, jumper"
+                         :page-sizes="[10, 50, 100, 150]"
+                         small
+                         :total="editCommodityData.total" :current-page.sync="editCommodityData.currentPage"
+                         :page-size="editCommodityData.pageSize"></el-pagination>
+          <el-button type="primary" size="mini" plain>确 定</el-button>
+        </div>
       </el-form>
       <span slot="footer" class="dialog-footer">
            <el-button @click="clearFormData">取 消</el-button>
