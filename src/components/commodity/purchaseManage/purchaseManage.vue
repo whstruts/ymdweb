@@ -1,7 +1,7 @@
 <template>
   <div class="topic-manage">
     <div class="setting_button_bg">
-      <div class=" setting_button_tag button_add"  @click="showAddTopicDialog()" v-if="$utils.checkButton('topicManage:add')">
+      <div class=" setting_button_tag button_add"  @click="showAddPurchaseDialog()" v-if="$utils.checkButton('topicManage:add')">
         <i class="iconfont icon-xinjian"></i><span>添加</span>
       </div>
       <div class="setting_button_tag button_delete"
@@ -82,7 +82,7 @@
         <el-table-column label="操作" width="80px" ref="opr">
           <template slot-scope="scope">
             <div class="table_setting_button" >
-              <el-button type="primary" plain size="mini" v-if="$utils.checkButton('topicManage:edit:topic')" @click.stop="showAddTopicDialog(scope.row)">编辑
+              <el-button type="primary" plain size="mini" v-if="$utils.checkButton('purchaseManage:edit:topic')" @click.stop="showAddPurchaseDialog(scope.row)">编辑
               </el-button>
             </div>
           </template>
@@ -133,12 +133,11 @@
 </template>
 
 <script>
-//  import API from "../../../api/api_purchase_manage"
-  import API from "../../../api/api_topic"
+  import API from "../../../api/api_purchase_manage"
   import purchaseAdd from "./addPurchase"
   import viewCommodity from "./viewCommodity"
   export default {
-    name: "customerManage",
+    name: "purchaseManage",
     data() {
       return {
         isDisplaySearch: true,
@@ -188,7 +187,7 @@
     },
     methods: {
       // 添加限购页
-      showAddTopicDialog(row){
+      showAddPurchaseDialog(row){
         if(row) {
           this.activityId = row.activityId +'';
           this.$refs.purchaseAdd.getActivity(row.activityId);

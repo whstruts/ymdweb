@@ -36,7 +36,7 @@
         border
         height="550"
         ref="multipleTable"
-        style="width: 100%;height: 100%"
+        style="width: 120%;height: 100%"
         :row-key="getRowKeys"
         :row-class-name="tableRowClassName"
         @selection-change="handleselectChange"
@@ -67,7 +67,8 @@
   </div>
 </template>
 <script>
-import API from "../../../api/api_topic";
+
+import API from "../../../api/api_purchase_manage"
 
 export default {
   name: 'addCommodity',
@@ -144,7 +145,7 @@ export default {
       params.limit = this.commodityTable.pageSize;
       params.order = this.commodityTable.order == 'descending' ? 'desc': '';
       params.sort = this.commodityTable.sort
-      API.queryActivityGoodList(params).then(res => {
+      API.chooseAbleCommodityList(params).then(res => {
         if (res.code == 0) {
           this.commodityTable.data = res.data.rows;
           this.commodityTable.total = res.data.total;
