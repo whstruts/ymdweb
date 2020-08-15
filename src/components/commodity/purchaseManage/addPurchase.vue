@@ -7,7 +7,7 @@
       class="cms_dialog_visible edit_customer_dialog"
       :close-on-click-modal="false"
       :before-close="clearFormData">
-      <el-form :model="formData" :rules="rules" ref="ruleForm" label-width=" 100px" class="edit-customer-form">
+      <el-form :model="formData" :rules="rules" ref="ruleForm" label-width="100px" class="edit-customer-form">
           <el-row>
             <el-col :span="12">
               <el-form-item label="活动时间" autofocus class="flex-item" prop="activeTime">
@@ -68,8 +68,8 @@
               {{scope.row.mediumPackage}}/{{scope.row.largePackage}}
             </template>
           </el-table-column>
-          <el-table-column prop="drugName" label="最低起定量" width="100px"></el-table-column>
-          <el-table-column prop="drugName" label="最高购买数量" width="120px"></el-table-column>
+          <el-table-column prop="minNum" label="最低起定量" width="100px"></el-table-column>
+          <el-table-column prop="maxNum" label="最高购买数量" width="120px"></el-table-column>
           <el-table-column label="厂家" prop="manufacturer" sortable width="120px"></el-table-column>
         </el-table>
         <div class="setting_pagination" v-if="editCommodityData.total>0">

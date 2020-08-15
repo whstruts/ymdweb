@@ -4,17 +4,20 @@
       title="添加商品"
       :visible.sync="addCommodityDialog"
       class="cms_dialog_visible"
-      width="900px"
+      width="1080px"
       :close-on-click-modal="false"
       :before-close="closeAddCommodityDiaolg">
       <div class="search_bg_wrap" style="margin-bottom: 15px">
-        <el-input v-model="filters.searchParam" clearable placeholder="编码/商品名/通用名"
+        <el-input v-model="filters.goodsSn" clearable placeholder="供应商编码"
+                    style="width: 240px;margin-right:15px" size="small" @keyup.enter.native="addSearchCommodityList"
+          ></el-input>
+          <el-input v-model="filters.drugName" clearable placeholder="商品名"
+                    style="width: 240px;margin-right:15px" size="small" @keyup.enter.native="addSearchCommodityList"
+          ></el-input>
+          <el-input v-model="filters.drugCommonName" clearable placeholder="通用名"
                     style="width: 240px;margin-right:15px" size="small" @keyup.enter.native="addSearchCommodityList"
           ></el-input>
           <el-input v-model="filters.manufacturer" clearable placeholder="厂家"
-                    style="width: 240px;margin-right:15px" size="small" @keyup.enter.native="addSearchCommodityList"
-          ></el-input>
-          <el-input v-model="filters.supplierName" clearable placeholder="供应商"
                     style="width: 240px;margin-right:15px" size="small" @keyup.enter.native="addSearchCommodityList"
           ></el-input>
           <el-input v-model="filters.specifications" clearable placeholder="规格"
@@ -25,6 +28,8 @@
           ></el-input>
           <el-button size="small" type="warning" @click="addSearchCommodityList"><i class="iconfont icon-chaxun"></i>查询
           </el-button>
+          <el-button style="float:right" size="small" type="primary" @click="addCommoditySubmit" :loading="submitLoading">确 定</el-button>
+          <el-button style="float:right" size="small" @click="closeAddCommodityDiaolg">取 消</el-button>
       </div>
       <el-table
         :data="commodityTable.data"
@@ -39,23 +44,14 @@
         @sort-change="tableDataSortChange"
         :default-sort = "{prop: 'drugSkuCode', order: 'desc'}">
        <el-table-column type="selection" width="45" align="center" :reserve-selection="true"></el-table-column>
-        <el-table-column label="商品编码" prop="drugSkuCode" sortable width="100px"></el-table-column>
-        <el-table-column label="商品通用名" prop="drugCommonName" sortable width="120px"></el-table-column>
-        <el-table-column label="规格/单位" prop="specifications" width="120px">
-          <template slot-scope="scope">{{scope.row.specifications}}/ {{scope.row.packageUnit}}</template>
-        </el-table-column>
-        <el-table-column label="厂家" prop="manufacturer" sortable width="120px"></el-table-column>
-        <el-table-column label="中/大包装-可拆零" prop="" width="130px">
-          <template slot-scope="scope">
-            {{scope.row.mediumPackage}}/{{scope.row.largePackage}}- {{scope.row.isRetail==0?'不可拆零':scope.row.isRetail==1?'可拆零':''}}
-          </template>
-        </el-table-column>
-        <el-table-column label="批号" prop="productionBatch" width="120px"></el-table-column>
-        <el-table-column label="效期" prop="dateExpiration" sortable width="80px"></el-table-column>
-        <el-table-column label="供应商报价" prop="supplierPrice" sortable width="120px"></el-table-column>
-         <el-table-column label="库存" prop="repertory"></el-table-column>
-        <el-table-column label="所属供应商" prop="supplierName" sortable width="120px">
-        </el-table-column>
+        <el-table-column label="供应商编码" prop="goodsNo" sortable width="120px"></el-table-column>
+        <el-table-column label="商品名" prop="drugName" sortable width="150px"></el-table-column>
+        <el-table-column label="通用名" prop="drugCommonName" sortable width="150px"></el-table-column>
+        <el-table-column label="规格" prop="specifications" width="120px"></el-table-column>
+        <el-table-column label="厂家" prop="manufacturer" sortable width="150px"></el-table-column>
+        <el-table-column label="效期" prop="dateExpiration" sortable width="120px"></el-table-column>
+        <el-table-column label="批准文号" prop="approveNumber" sortable width="120px"></el-table-column>
+        <el-table-column label="供应商" prop="supplierName" sortable width="120px"></el-table-column>
       </el-table>
       <div class="setting_pagination" v-if="commodityTable.total>0">
         <el-pagination @current-change="handleCurrentChange"
@@ -67,10 +63,6 @@
                        :page-size="commodityTable.pageSize"></el-pagination>
         <el-button type="primary" size="mini" plain>确 定</el-button>
       </div>
-      <span slot="footer" class="dialog-footer">
-           <el-button @click="closeAddCommodityDiaolg">取 消</el-button>
-           <el-button type="primary" @click="addCommoditySubmit" :loading="submitLoading">确 定</el-button>
-      </span>
     </el-dialog>
   </div>
 </template>
