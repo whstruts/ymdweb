@@ -157,6 +157,17 @@ export default new Router({
           }
         },
         {
+          path: 'centralLibrary',
+          name: "centralLibrary",
+          component: resolve => require(['@/components/commodity/centralLibrary/centralLibrary'], resolve),
+          meta: {
+            title: '限购',
+            noCache: false,//如果设置为true，则不会被 <keep-alive> 缓存(默认 false)
+            breadcrumb: true, // 如果设置为false，则不会在breadcrumb面包屑中显示
+            affix: false,// 添加了 Affix 属性，则当前tag会被固定在 tags-view中（不可被删除）
+          }
+        },
+        {
           path: 'shelfSupplier',
           name: "shelfSupplier",
           component: resolve => require(['@/components/commodity/centralLibrary/shelfSupplier'], resolve),
@@ -310,6 +321,18 @@ export default new Router({
           component: resolve => require(['@/components/cms/topicManage/topicManage'], resolve),
           meta: {
             title: '专题页配置',
+            noCache: false,//如果设置为true，则不会被 <keep-alive> 缓存(默认 false)
+            breadcrumb: true, // 如果设置为false，则不会在breadcrumb面包屑中显示
+            affix: false,// 添加了 Affix 属性，则当前tag会被固定在 tags-view中（不可被删除）
+          }
+        },
+        // 限购管理
+        {
+          path: 'commodityPurchaseManage',
+          name: "commodityPurchaseManage",
+          component: resolve => require(['@/components/commodity/purchaseManage/purchaseManage'], resolve),
+          meta: {
+            title: '限购管理',
             noCache: false,//如果设置为true，则不会被 <keep-alive> 缓存(默认 false)
             breadcrumb: true, // 如果设置为false，则不会在breadcrumb面包屑中显示
             affix: false,// 添加了 Affix 属性，则当前tag会被固定在 tags-view中（不可被删除）
