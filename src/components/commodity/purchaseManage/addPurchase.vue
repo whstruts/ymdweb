@@ -88,11 +88,11 @@
            <el-button type="primary" :loading="loadingbtn" @click="handleSave()">保存</el-button>
       </span>
     </el-dialog>
-    <add-commodity :addCommodityDialog="addCommodityDialog" :commodityList = originCommodityData.data @closeAddCommodityDiaolg=closeAddCommodityDiaolg @addCommoditySave = addCommoditySave></add-commodity>
+    <add-commodity ref='addCommodityDialog' :addCommodityDialog="addCommodityDialog" :commodityList = originCommodityData.data @closeAddCommodityDiaolg=closeAddCommodityDiaolg @addCommoditySave = addCommoditySave></add-commodity>
   </div>
 </template>
 <script>
-import API from "../../../api/api_topic";
+import API from "../../../api/api_purchase_manage";
 import cms_api from "../../../api/api_homeSetting";
 import addCommodity from "./addCommodity"
 export default {
@@ -205,23 +205,24 @@ export default {
   },
   methods:{
     // 获取限购页详情
-    getActivity(row){
-      if(row)
+    getPurchase(row){
+      if(row.mpId.length > 0)
       {
-
+        this.addTemporaryId = row.mpId
+        //this.$message.error("修改"+row.drugCommonName);
       }
-      else
-      {
-        API.getAddTemporaryId().then(res => {
-          if (res.code == 0) {
-            let base = process.env.API_ROOT
-            console.log(base)
-            this.addTemporaryId = res.data;
-          } else {
-            this.$message.error(res.msg);
-          }
-        })
-      }
+    },
+    addPurchase(){
+      API.getAddTemporaryId().then(res => {
+        if (res.code == 0) {
+          let base = process.env.API_ROOT
+          console.log(base)
+          this.addTemporaryId = res.data;
+          //this.$message.error(this.addTemporaryId);
+        } else {
+          this.$message.error(res.msg);
+        }
+      })
     },
      // 获取商品状态
     getCommodityStatus(commodityData){
@@ -433,7 +434,16 @@ export default {
     },
     // 打开添加商品弹框
     openAddCommodityDialog(){
-      this.addCommodityDialog = true;
+      if(this.formData.activeTime.length > 0)
+      {
+        this.addCommodityDialog = true;
+        this.$refs.addCommodityDialog.setActiveTime(this.formData.activeTime);
+        this.$refs.addCommodityDialog.setTemporaryId(this.addTemporaryId);
+      }
+      else
+      {
+        this.$message.error("请输入限购时间");
+      }
     },
     // 关闭添加商品弹框
     closeAddCommodityDiaolg(){

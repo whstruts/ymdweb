@@ -6,16 +6,16 @@ import * as API from './'
 
 export default {
   addTemporaryCommodity: params => {
-    return API.POST('/api-mallcenter/CommodityPurchaseManage/addTemporaryCommodity', params)
+    return API.POST('/api-mallcenter/commodityPurchaseManage/addTemporaryCommodity', params)
   },
   batchRemove: params => {
-    return API.DELETE('/api-mallcenter/CommodityPurchaseManage/batchRemove', params)
+    return API.DELETE('/api-mallcenter/commodityPurchaseManage/batchRemove', params)
   },
   cancelAdd: params => {
-    return API.DELETE('/api-mallcenter/CommodityPurchaseManage/cancelAdd', params)
+    return API.DELETE('/api-mallcenter/commodityPurchaseManage/cancelAdd', params)
   },
   chooseAbleCommodityList: params => {
-    return API.GET('/api-mallcenter/CommodityPurchaseManage/chooseAbleCommodityList', params)
+    return API.GET('/api-mallcenter/commodityPurchaseManage/chooseAbleCommodityList', params)
   },
   getAddTemporaryId: params => {
     return API.GET('/api-mallcenter/commodityPurchaseManage/getAddTemporaryId', params)
@@ -24,10 +24,10 @@ export default {
     return API.GET('/api-mallcenter/commodityPurchaseManage/list', params)
   },
   saveTemporary: params => {
-    return API.PUT('/api-mallcenter/CommodityPurchaseManage/saveTemporary', params)
+    return API.PUT('/api-mallcenter/commodityPurchaseManage/saveTemporary', params)
   },
   selectAddTemporaryList: params => {
-    return API.GET('/api-mallcenter/CommodityPurchaseManage/selectAddTemporaryList', params)
+    return API.GET('/api-mallcenter/commodityPurchaseManage/selectAddTemporaryList', params)
   },
   update: params => {
     return API.POST('/api-mallcenter/commodityPurchaseManage/update', params)

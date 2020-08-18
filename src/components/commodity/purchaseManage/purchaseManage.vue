@@ -189,7 +189,11 @@
       // 添加限购页
       showAddPurchaseDialog(row){
         if(row) {
-          this.$refs.purchaseAdd.getActivity(row);
+          this.$refs.purchaseAdd.getPurchase(row);
+        }
+        else
+        {
+          this.$refs.purchaseAdd.addPurchase();
         }
         this.dialogVisible = true;
       },

@@ -8,22 +8,22 @@
       :close-on-click-modal="false"
       :before-close="closeAddCommodityDiaolg">
       <div class="search_bg_wrap" style="margin-bottom: 15px">
-        <el-input v-model="filters.goodsSn" clearable placeholder="供应商编码"
+        <el-input v-model="filters.goodsNo" clearable placeholder="供应商编码"
                     style="width: 240px;margin-right:15px" size="small" @keyup.enter.native="addSearchCommodityList"
           ></el-input>
-          <el-input v-model="filters.drugName" clearable placeholder="商品名"
+          <el-input v-model="filters.drugNameLike" clearable placeholder="商品名"
                     style="width: 240px;margin-right:15px" size="small" @keyup.enter.native="addSearchCommodityList"
           ></el-input>
-          <el-input v-model="filters.drugCommonName" clearable placeholder="通用名"
+          <el-input v-model="filters.drugCommonNameLike" clearable placeholder="通用名"
                     style="width: 240px;margin-right:15px" size="small" @keyup.enter.native="addSearchCommodityList"
           ></el-input>
-          <el-input v-model="filters.manufacturer" clearable placeholder="厂家"
+          <el-input v-model="filters.manufacturerLike" clearable placeholder="厂家"
                     style="width: 240px;margin-right:15px" size="small" @keyup.enter.native="addSearchCommodityList"
           ></el-input>
-          <el-input v-model="filters.specifications" clearable placeholder="规格"
+          <el-input v-model="filters.specificationsLike" clearable placeholder="规格"
                     style="width: 240px;margin-right:15px" size="small" @keyup.enter.native="addSearchCommodityList"
           ></el-input>
-          <el-input v-model="filters.approveNumber" clearable placeholder="批准文号  "
+          <el-input v-model="filters.approveNumberLike" clearable placeholder="批准文号  "
                     style="width: 240px;margin-right:15px" size="small" @keyup.enter.native="addSearchCommodityList"
           ></el-input>
           <el-button size="small" type="warning" @click="addSearchCommodityList"><i class="iconfont icon-chaxun"></i>查询
@@ -76,11 +76,12 @@ export default {
     return{
       submitLoading: false,
       filters:{
-        searchParam: '',
-        manufacturer:'',
-        supplierName:'',
-        specifications:'',
-        approveNumber:''
+        goodsNo: '',
+        drugNameLike:'',
+        drugCommonNameLike:'',
+        manufacturerLike:'',
+        specificationsLike:'',
+        approveNumberLike:'',
       },
       commodityTable:{
         data: [],
@@ -88,7 +89,9 @@ export default {
         pageSize: 10,
         currentPage: 1,
       },
-      multipleAddCommodity:[]
+      multipleAddCommodity:[],
+      activeTime:[],
+      temporaryId:'',
     }
   },
   props:{
@@ -104,6 +107,14 @@ export default {
     }
   },
   methods:{
+    setActiveTime(time)
+    {
+      this.activeTime = time;
+    },
+    setTemporaryId(id)
+    {
+      this.temporaryId = id;
+    },
     closeAddCommodityDiaolg(){
       this.clearData();
       this.$emit("closeAddCommodityDiaolg")
@@ -117,11 +128,12 @@ export default {
         currentPage: 1
       };
       this.filters = {
-        searchParam: '',
-        manufacturer:'',
-        supplierName:'',
-        specifications:'',
-        approveNumber:''
+        goodsNo: '',
+        drugNameLike:'',
+        drugCommonNameLike:'',
+        manufacturerLike:'',
+        specificationsLike:'',
+        approveNumberLike:'',
       };
     },
     //搜索
@@ -135,16 +147,14 @@ export default {
     },
     //查询商品所有列表
     queryCommodityList() {
-      let goodIds = "";
-      this.commodityList.forEach(item => {
-        goodIds += item.commodityId + ",";
-      })
       let params = this.filters;
-      params.goodIds = goodIds;
       params.page = this.commodityTable.currentPage;
       params.limit = this.commodityTable.pageSize;
       params.order = this.commodityTable.order == 'descending' ? 'desc': '';
       params.sort = this.commodityTable.sort
+      params.startDateStr = this.activeTime[0]
+      params.endDateStr = this.activeTime[1]
+      params.temporaryId = this.temporaryId
       API.chooseAbleCommodityList(params).then(res => {
         if (res.code == 0) {
           this.commodityTable.data = res.data.rows;
