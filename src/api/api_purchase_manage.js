@@ -21,7 +21,7 @@ export default {
     return API.GET('/api-mallcenter/CommodityPurchaseManage/getAddTemporaryId', params)
   },
   list: params => {
-    return API.GET('/api-mallcenter/CommodityPurchaseManage/list', params)
+    return API.GET('/api-mallcenter/commodityPurchaseManage/list', params)
   },
   saveTemporary: params => {
     return API.PUT('/api-mallcenter/CommodityPurchaseManage/saveTemporary', params)

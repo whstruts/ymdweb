@@ -14,7 +14,7 @@
       <div class="search-box flex-row"  v-if="isDisplaySearch">
         <p>
           <span class="search_hint">状态</span>
-          <el-select v-model="filters.activityStatus" placeholder="请选择" size="mini" @change="handleSearch">
+          <el-select v-model="filters.mpStatus" placeholder="请选择" size="mini" @change="handleSearch">
             <el-option label="全部" :key=" " value=""></el-option>
             <el-option  v-for="item in statusList"
               :key="item.value"
@@ -82,7 +82,7 @@
         <el-table-column label="操作" width="80px" ref="opr">
           <template slot-scope="scope">
             <div class="table_setting_button" >
-              <el-button type="primary" plain size="mini" v-if="$utils.checkButton('purchaseManage:edit:topic')" @click.stop="showAddPurchaseDialog(scope.row)">编辑
+              <el-button type="primary" plain size="mini" v-if="$utils.checkButton('topicManage:edit:topic')" @click.stop="showAddPurchaseDialog(scope.row)">编辑
               </el-button>
             </div>
           </template>
@@ -90,13 +90,13 @@
         <!-- 0未认证，1已认证，2已驳回 3 认证中 -->
         <el-table-column prop="mpStatus" label="活动状态" width="100px" align="center">
           <template slot-scope="scope">
-            <span v-if="scope.row.activityStatus == 1 ">未开始</span>
-            <span v-if="scope.row.activityStatus == 2 ">进行中</span>
-            <span v-if="scope.row.activityStatus == 3 ">已结束</span>
+            <span v-if="scope.row.mpStatus == 1 ">未开始</span>
+            <span v-if="scope.row.mpStatus == 2 ">进行中</span>
+            <span v-if="scope.row.mpStatus == 3 ">已结束</span>
           </template>
         </el-table-column>
         <el-table-column prop="goodsSn" label="供应商编码" width="120px"></el-table-column>
-        <el-table-column prop="drugName" label="商品名称" width="180px"></el-table-column>
+        <el-table-column prop="drugCommonName" label="商品名称" width="180px"></el-table-column>
         <el-table-column prop="specifications" label="规格/单位" min-width="120">
           <template slot-scope="scope">
             {{scope.row.specifications}}/{{scope.row.packageUnit}}
@@ -107,11 +107,11 @@
             {{scope.row.mediumPackage}}/{{scope.row.largePackage}}
           </template>
         </el-table-column>
-        <el-table-column prop="drugName" label="最低起定量" width="100px"></el-table-column>
-        <el-table-column prop="drugName" label="最高购买数量" width="120px"></el-table-column>
+        <el-table-column prop="minNum" label="最低起定量" width="100px"></el-table-column>
+        <el-table-column prop="maxNum" label="最高购买数量" width="100px"></el-table-column>
         <el-table-column prop="" label="活动时间"  width="280px">
           <template slot-scope="scope">
-            {{scope.row.activityStartTime}}/{{scope.row.activityStartTime}}
+            {{scope.row.startDate}}/{{scope.row.endDate}}
           </template>
         </el-table-column>
         <el-table-column prop="manufacturer" label="厂家" width="180px"></el-table-column>
@@ -192,6 +192,15 @@
           this.activityId = row.activityId +'';
           this.$refs.purchaseAdd.getActivity(row.activityId);
         }
+        API.addTemporaryCommodity().then(res => {
+          if (res.code == 0) {
+            let base = process.env.API_ROOT
+            console.log(base)
+            let data = res.data.rows;
+          } else {
+            this.$message.error(res.msg);
+          }
+        })
         this.dialogVisible = true;
       },
       // 删除专题页
@@ -246,35 +255,17 @@
         let params = {
           page: this.table.currentPage,
           limit: this.table.pageSize,
-          activityStatus: this.filters.activityStatus,
+          mpStatus: this.filters.mpStatus,
           goodsSn: this.filters.goodsSn,
           drugName: this.filters.drugName,
           drugCommonName: this.filters.drugCommonName,
           manufacturer: this.filters.manufacturer,
         }
-        if(this.filters.activityTime && this.filters.activityTime.length > 0) {
-          params.activityStartTime = this.filters.activityTime[0];
-          params.activityEndTime = this.filters.activityTime[1];
-        }
-        if(this.filters.updateTime && this.filters.updateTime.length > 0) {
-          params.updateStartTime = this.filters.updateTime[0];
-          params.updateEndTime = this.filters.updateTime[1];
-        }
-        API.getActivityList(params).then(res => {
+        API.list(params).then(res => {
           if (res.code == 0) {
             let base = process.env.API_ROOT
             console.log(base)
             let data = res.data.rows;
-            for(let i in data) {
-              let typeArr = res.data.rows[i].activityType.split(",");
-              for (let j in typeArr) {
-                if(typeArr[j] == 'PC') {
-                  data[i].pcAddress = 'https://app.ymdb2b.com/#/homePage/topic?activityId=' + data[i].activityId
-                } else if (typeArr[j] == 'APP') {
-                  data[i].appAddress = 'https://app.ymdb2b.com/commonStatic/topic/index.html#/?activityId=' + data[i].activityId
-                }
-              }
-            }
             this.table.total = res.data.total;
             this.table.data = data;
           } else {
