@@ -175,7 +175,7 @@
           },
         ],
         multipleSelection:[],
-        activityId: ""  // 点击获取的专题页id
+        addTemporaryId: ""  // 点击获取的限购暂存id
       }
     },
     components:{
@@ -189,18 +189,8 @@
       // 添加限购页
       showAddPurchaseDialog(row){
         if(row) {
-          this.activityId = row.activityId +'';
-          this.$refs.purchaseAdd.getActivity(row.activityId);
+          this.$refs.purchaseAdd.getActivity(row);
         }
-        API.addTemporaryCommodity().then(res => {
-          if (res.code == 0) {
-            let base = process.env.API_ROOT
-            console.log(base)
-            let data = res.data.rows;
-          } else {
-            this.$message.error(res.msg);
-          }
-        })
         this.dialogVisible = true;
       },
       // 删除专题页

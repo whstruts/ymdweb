@@ -183,7 +183,8 @@ export default {
           value: '2',
           label: '已下架'
         }
-      ]
+      ],
+      addTemporaryId:""
     }
   },
   props:{
@@ -203,36 +204,24 @@ export default {
     this.uploadUrl = cms_api.upload();
   },
   methods:{
-    // 获取专题页详情
-    getActivity(activityId){
-      API.getActivity({activityId: activityId}).then( (res) =>{
-       if (res.code == 0) {
-        let data = res.data;
-        if(data.activityType) {
-          data.activityType = data.activityType.split(",");
-        }
-        if(data.activityStartTime && data.activityEndTime) {
-          data.activeTime = [data.activityStartTime, data.activityEndTime];
-        }
-        if(data.headImg) {
-          this.isUploadHeadImg = true;
-        } else {
-          this.isUploadHeadImg = false;
-        }
-        if(data.appHeadImg) {
-          this.isUploadAppHeadImg = true;
-        } else{
-          this.isUploadAppHeadImg = false;
-        }
-        if(data.commodityData) {
-          let commodityData = JSON.parse(data.commodityData)
-          this.getCommodityStatus(commodityData);
-        }
-         this.formData = data;
-      } else {
-        this.$message.error(res.msg)
+    // 获取限购页详情
+    getActivity(row){
+      if(row)
+      {
+
       }
-      })
+      else
+      {
+        API.getAddTemporaryId().then(res => {
+          if (res.code == 0) {
+            let base = process.env.API_ROOT
+            console.log(base)
+            this.addTemporaryId = res.data;
+          } else {
+            this.$message.error(res.msg);
+          }
+        })
+      }
     },
      // 获取商品状态
     getCommodityStatus(commodityData){

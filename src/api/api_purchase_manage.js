@@ -18,7 +18,7 @@ export default {
     return API.GET('/api-mallcenter/CommodityPurchaseManage/chooseAbleCommodityList', params)
   },
   getAddTemporaryId: params => {
-    return API.GET('/api-mallcenter/CommodityPurchaseManage/getAddTemporaryId', params)
+    return API.GET('/api-mallcenter/commodityPurchaseManage/getAddTemporaryId', params)
   },
   list: params => {
     return API.GET('/api-mallcenter/commodityPurchaseManage/list', params)
@@ -30,6 +30,6 @@ export default {
     return API.GET('/api-mallcenter/CommodityPurchaseManage/selectAddTemporaryList', params)
   },
   update: params => {
-    return API.POST('/api-mallcenter/CommodityPurchaseManage/update', params)
+    return API.POST('/api-mallcenter/commodityPurchaseManage/update', params)
   },
 }
