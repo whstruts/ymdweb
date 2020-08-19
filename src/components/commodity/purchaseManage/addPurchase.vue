@@ -68,8 +68,24 @@
               {{scope.row.mediumPackage}}/{{scope.row.largePackage}}
             </template>
           </el-table-column>
-          <el-table-column prop="minNum" label="最低起定量" width="100px"></el-table-column>
-          <el-table-column prop="maxNum" label="最高购买数量" width="120px"></el-table-column>
+          <el-table-column label="最低购买数量" width="120px">
+            <template slot-scope="scope">
+              <el-input v-model="scope.row.minNum"
+                        onkeyup="value=value.replace(/[^\d]/g,'').replace(/^0{1,}/g,'')"
+                        size="mini"
+                        maxlength="3"
+                        style="width: 80px;"></el-input>
+            </template>
+          </el-table-column>
+          <el-table-column label="最高购买数量" width="120px">
+            <template slot-scope="scope">
+              <el-input v-model="scope.row.maxNum"
+                        onkeyup="value=value.replace(/[^\d]/g,'').replace(/^0{1,}/g,'')"
+                        size="mini"
+                        maxlength="3"
+                        style="width: 80px;"></el-input>
+            </template>
+          </el-table-column>
           <el-table-column label="厂家" prop="manufacturer" sortable width="120px"></el-table-column>
         </el-table>
         <div class="setting_pagination" v-if="editCommodityData.total>0">
