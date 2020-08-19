@@ -244,23 +244,23 @@ export default {
     addTemporaryCommodity(commodityData){
       let dataList = commodityData;
       if(dataList && dataList.length <= 0) return;
-      let commodityIds = ''
+      let commodityIds = []
       for(let i = 0; i < dataList.length; i++) {
-        dataList[i].supplierPrice = Number(dataList[i].supplierPrice);
-        commodityIds += dataList[i].commodityId+ ",";
-      }
-      API.addTemporaryCommodity({commodityIds: commodityIds}).then( res=> {
+        // dataList[i].supplierPrice = Number(dataList[i].supplierPrice);
+        // commodityIds += dataList[i].commodityId+ ",";
+        commodityIds[i] = dataList[i].commodityId
+       }
+      let params = {}
+      params.startDateStr = this.formData.activeTime[0]
+      params.endDateStr = this.formData.activeTime[1]
+      params.temporaryId = this.addTemporaryId
+      params.commodityIdList = commodityIds
+      API.addTemporaryCommodity(params).then( res=> {
         if(res.code == 0) {
-          if(res.data) {
-            let status = res.data;
-            for(let i in status) {
-              commodityData[i].status = status[i]+'';
-            }
             this.editCommodityData.data = dataList;
             this.editCommodityData.total = dataList.length;
             this.originCommodityData.data = JSON.parse(JSON.stringify(dataList));
             this.originCommodityData.total = dataList.length;
-          }
         } else {
           this.$message.error(res.msg);
         }
@@ -526,8 +526,8 @@ export default {
           params.commodityData = JSON.stringify(this.originCommodityData.data);
           params.activityType = params.activityType.join(",");
           if(this.addTemporaryId) {  // 新增
-            params.addTemporaryId = this.addTemporaryId;
-            API.saveTemporary(params).then( (res) => {
+            params.temporaryId = this.addTemporaryId;
+            API.saveTemporary({temporaryId:this.addTemporaryId}).then( (res) => {
               this.loadingbtn = false;
               if(res.code == 0) {
                 this.clearDialog();
