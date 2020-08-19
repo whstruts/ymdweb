@@ -203,15 +203,15 @@
           this.$message.warning("请先勾选要删除的选项！")
           return
         };
-        let activityArr = [], activityIds = "";
+        let activityArr = [], mpIds = "";
         for (let i=0; i< this.multipleSelection.length; i++) {
-          activityArr.push(this.multipleSelection[i].activityId)
+          activityArr.push(this.multipleSelection[i].mpIds)
         }
-        activityIds = activityArr.join(",");
+        mpIds = activityArr.join(",");
         this.$confirm('确定要删除吗?', '提示', {
             type: 'warning'
           }).then(_ => {
-            API.deleteActivity({activityIds: activityIds})
+            API.batchRemove({mpIds: mpIds})
             .then((res) => {
                 if (res.code == 0) {
                   this.initData();

@@ -240,8 +240,8 @@ export default {
         }
       })
     },
-     // 获取商品状态
-    getCommodityStatus(commodityData){
+     // 增加限购商品
+    addTemporaryCommodity(commodityData){
       let dataList = commodityData;
       if(dataList && dataList.length <= 0) return;
       let commodityIds = ''
@@ -249,7 +249,7 @@ export default {
         dataList[i].supplierPrice = Number(dataList[i].supplierPrice);
         commodityIds += dataList[i].commodityId+ ",";
       }
-      cms_api.getCommodityStatus({commodityIds: commodityIds}).then( res=> {
+      API.addTemporaryCommodity({commodityIds: commodityIds}).then( res=> {
         if(res.code == 0) {
           if(res.data) {
             let status = res.data;
@@ -268,6 +268,14 @@ export default {
 
     },
     clearFormData() {
+      API.cancelAdd(this.addTemporaryId).then(res => {
+        if (res.code == 0) {
+          let base = process.env.API_ROOT
+          console.log(base)
+        } else {
+          this.$message.error(res.msg);
+        }
+      })
       this.clearDialog();
       this.$emit("closeDialog")
     },
@@ -281,12 +289,23 @@ export default {
     },
    // 搜索已添加的商品
     addSearchCommodityList(){
-      var restaurants = this.originCommodityData.data;
-      var results = restaurants.filter(item =>
-      (item.status.indexOf(this.filters.status) != -1 && (item.drugName.indexOf(this.filters.searchParam) != -1 ||item.drugCommonName.indexOf(this.filters.searchParam) != -1 || item.drugSkuCode.indexOf(this.filters.searchParam) != -1) && item.supplierName.indexOf(this.filters.supplierName) != -1 ));
-      console.log(results)
-      this.editCommodityData.data = results;
-      this.editCommodityData.total = results.length;
+      API.selectAddTemporaryList().then(res => {
+        if (res.code == 0) {
+          let base = process.env.API_ROOT
+          console.log(base)
+          console.log(res.data.rows)
+          this.editCommodityData.data = res.data.rows;
+          this.editCommodityData.total = res.data.total;
+        } else {
+          this.$message.error(res.msg);
+        }
+      })
+      // var restaurants = this.originCommodityData.data;
+      // var results = restaurants.filter(item =>
+      // (item.status.indexOf(this.filters.status) != -1 && (item.drugName.indexOf(this.filters.searchParam) != -1 ||item.drugCommonName.indexOf(this.filters.searchParam) != -1 || item.drugSkuCode.indexOf(this.filters.searchParam) != -1) && item.supplierName.indexOf(this.filters.supplierName) != -1 ));
+      // console.log(results)
+      // this.editCommodityData.data = results;
+      // this.editCommodityData.total = results.length;
     },
     beforeAvatarUpload(file) {
       this.uploadHeaders.Authorization = localStorage.getItem('access-token');
@@ -482,7 +501,7 @@ export default {
     addCommoditySave(val){
      let data  = this.originCommodityData.data
       data = data.concat(val);
-      this.getCommodityStatus(data)
+      this.addTemporaryCommodity(data)
       this.addCommodityDialog = false;
       this.filters = {
         status:'',
@@ -506,13 +525,13 @@ export default {
           }
           params.commodityData = JSON.stringify(this.originCommodityData.data);
           params.activityType = params.activityType.join(",");
-          if(this.activityId) {  // 更新
-            params.activityId = this.activityId;
-            API.updateActivity(params).then( (res) => {
+          if(this.addTemporaryId) {  // 新增
+            params.addTemporaryId = this.addTemporaryId;
+            API.saveTemporary(params).then( (res) => {
               this.loadingbtn = false;
               if(res.code == 0) {
                 this.clearDialog();
-                this.$emit("closeDialog",'update')
+                this.$emit("closeDialog",'add')
                 this.$message.success("操作成功");
               } else {
                 this.$message.error(res.msg);
@@ -520,12 +539,12 @@ export default {
             }).catch( () => {
               this.loadingbtn = false;
             })
-          } else { // 新增
-            API.addActivity(params).then( (res) => {
+          } else { // 更新
+            API.update(params).then( (res) => {
               this.loadingbtn = false;
               if(res.code == 0) {
                 this.clearDialog();
-                this.$emit("closeDialog",'add')
+                this.$emit("closeDialog",'update')
                 this.$message.success("操作成功");
               } else {
                 this.$message.error(res.msg);
