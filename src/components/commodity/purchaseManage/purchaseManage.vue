@@ -205,7 +205,7 @@
         };
         let activityArr = [], mpIds = "";
         for (let i=0; i< this.multipleSelection.length; i++) {
-          activityArr.push(this.multipleSelection[i].mpIds)
+          activityArr.push(this.multipleSelection[i].mpId)
         }
         mpIds = activityArr.join(",");
         this.$confirm('确定要删除吗?', '提示', {

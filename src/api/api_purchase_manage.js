@@ -30,6 +30,6 @@ export default {
     return API.GET('/api-mallcenter/commodityPurchaseManage/selectAddTemporaryList', params)
   },
   update: params => {
-    return API.POST('/api-mallcenter/commodityPurchaseManage/update', params)
+    return API.PUT('/api-mallcenter/commodityPurchaseManage/update', params)
   },
 }

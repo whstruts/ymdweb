@@ -179,7 +179,7 @@ export default {
         activityName: [
           {required: true, message: "请输入专题名称", trigger: "blur"}
         ],
-        activeTime: [{required: true, message: "请选择活动时间", trigger: "change"}],
+        // activeTime: [{required: true, message: "请选择活动时间", trigger: "change"}],
         backgroundColor: [
           {required: true, message: "请输入背景颜色值", trigger: "blur"},
           {
@@ -200,7 +200,7 @@ export default {
           label: '已下架'
         }
       ],
-      addTemporaryId:""
+      addTemporaryId:"",
     }
   },
   props:{
@@ -224,7 +224,11 @@ export default {
     getPurchase(row){
       if(row.mpId.length > 0)
       {
-        this.addTemporaryId = row.mpId
+    //    this.rules.activeTime = [row.startDate,row.endDate]
+        this.editCommodityData.data.push(row);
+        this.editCommodityData.total = 1;
+        this.originCommodityData.data.push(row);
+        this.originCommodityData.total = 1;
         //this.$message.error("修改"+row.drugCommonName);
       }
     },
@@ -268,14 +272,17 @@ export default {
 
     },
     clearFormData() {
-      API.cancelAdd(this.addTemporaryId).then(res => {
-        if (res.code == 0) {
-          let base = process.env.API_ROOT
-          console.log(base)
-        } else {
-          this.$message.error(res.msg);
-        }
-      })
+      if(this.addTemporaryId.length > 0)
+      {
+        API.cancelAdd(this.addTemporaryId).then(res => {
+          if (res.code == 0) {
+            let base = process.env.API_ROOT
+            console.log(base)
+          } else {
+            this.$message.error(res.msg);
+          }
+        })
+      }
       this.clearDialog();
       this.$emit("closeDialog")
     },
@@ -539,19 +546,27 @@ export default {
             }).catch( () => {
               this.loadingbtn = false;
             })
-          } else { // 更新
-            API.update(params).then( (res) => {
-              this.loadingbtn = false;
-              if(res.code == 0) {
-                this.clearDialog();
-                this.$emit("closeDialog",'update')
-                this.$message.success("操作成功");
-              } else {
-                this.$message.error(res.msg);
-              }
-            }).catch( () => {
-              this.loadingbtn = false;
-            })
+          } else {
+            let editParams={}
+            for (let l = 0; l < this.editCommodityData.data.length; l++) {
+              editParams.endDateStr = this.editCommodityData.data[l].endDate
+              editParams.startDateStr = this.editCommodityData.data[l].startDate
+              editParams.maxNum = this.editCommodityData.data[l].maxNum
+              editParams.minNum = this.editCommodityData.data[l].minNum
+              editParams.mpId = this.editCommodityData.data[l].mpId
+              API.update(editParams).then((res) => {
+                this.loadingbtn = false;
+                if (res.code == 0) {
+                  this.clearDialog();
+                  this.$emit("closeDialog", 'update')
+                  this.$message.success("操作成功");
+                } else {
+                  this.$message.error(res.msg);
+                }
+              }).catch(() => {
+                this.loadingbtn = false;
+              })
+            }
           }
         }
       })
