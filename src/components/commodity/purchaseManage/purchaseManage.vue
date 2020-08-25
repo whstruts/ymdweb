@@ -376,44 +376,21 @@
       },
       // 点击保存
       handleRowSave(item,index) {
-        if(item.unitBidIncrement == "" ||  item.unitBidIncrement == 0) {
-          this.$message.error("请填写单体价");
-          return
-        }
-        if(item.chainBidIncrement == "" ||  item.chainBidIncrement == 0) {
-          this.$message.error("请填写连锁价");
-          return
-        }
-        if(item.commercialBidIncrement == "" ||  item.commercialBidIncrement == 0) {
-          this.$message.error("请填写商业价");
-          return
-        }
-        let supplierIds = []; // 选中的供应商id;
-        for(let i in item.supplierList) {
-          if(item.supplierList[i].selectFlag) {
-            supplierIds.push(item.supplierList[i].supplierId);
-          }
-        }
-        if(supplierIds.length <= 0) {
-          this.$message.error("请选择所属供应商");
-          return
-        }
-        let postData = {
-          "chainBidIncrement": item.chainBidIncrement,
-          "commercialBidIncrement": item.commercialBidIncrement,
-          "drugSkuId": item.drugSkuId,
-          "supplierIds":supplierIds,
-          "unitBidIncrement": item.unitBidIncrement
-        }
-        API.updateCommodityPrice(postData).then( (res) => {
-          if(res.code == 0) {
-            this.$message.success("操作成功");
-            this.table.currentPage = 1;
-            this.queryCommodityPriceList();
-          } else {
-            this.$message.error(res.msg)
-          }
-        })
+        let editParams={}
+          editParams.endDateStr = this.table.data[index].endDate
+          editParams.startDateStr = this.table.data[index].startDate
+          editParams.maxNum = this.table.data[index].maxNum
+          editParams.minNum = this.table.data[index].minNum
+          editParams.mpId = this.table.data[index].mpId
+          API.update(editParams).then((res) => {
+            if (res.code == 0) {
+              this.$message.success("操作成功");
+            } else {
+              this.$message.error(res.msg);
+            }
+          }).catch(() => {
+
+          })
       }
     }
   }
