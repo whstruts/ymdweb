@@ -79,11 +79,13 @@
         v-loading="loadingTable">
         <el-table-column type="selection" width="45" align="center"></el-table-column>
         <el-table-column label=" " type="index" width="40" align="center"></el-table-column>
-        <el-table-column label="操作" width="80px" ref="opr">
+        <el-table-column label="操作" width="130px" align="center" ref="opr">
           <template slot-scope="scope">
             <div class="table_setting_button" >
-              <el-button type="primary" plain size="mini" v-if="$utils.checkButton('topicManage:edit:topic')" @click.stop="showAddPurchaseDialog(scope.row)">编辑
-              </el-button>
+<!--              <el-button type="primary" plain size="mini" v-if="$utils.checkButton('topicManage:edit:topic')" @click.stop="showAddPurchaseDialog(scope.row)">编辑</el-button>-->
+              <el-button type="primary" plain size="mini" v-if="$utils.checkButton('platformPrice:edit:commodity') && !scope.row.isEdit" @click="handleRowEdit(scope.row, scope.$index)">编辑</el-button>
+              <el-button  plain size="mini" v-if="$utils.checkButton('platformPrice:edit:commodity') && scope.row.isEdit" @click="handleRowCancel(scope.row, scope.$index)">取消</el-button>
+              <el-button  type="primary" plain size="mini" v-if="$utils.checkButton('platformPrice:edit:commodity') && scope.row.isEdit" @click="handleRowSave(scope.row, scope.$index)">保存</el-button>
             </div>
           </template>
         </el-table-column>
@@ -107,8 +109,28 @@
             {{scope.row.mediumPackage}}/{{scope.row.largePackage}}
           </template>
         </el-table-column>
-        <el-table-column prop="minNum" label="最低起定量" width="100px"></el-table-column>
-        <el-table-column prop="maxNum" label="最高购买数量" width="100px"></el-table-column>
+        <el-table-column label="最低购买数量" width="120px">
+          <template slot-scope="scope">
+            <el-input v-model="scope.row.minNum"
+                      onkeyup="value=value.replace(/[^\d]/g,'').replace(/^0{1,}/g,'')"
+                      size="mini"
+                      maxlength="3"
+                      :disabled="!scope.row.isEdit"
+                      @change="isPriceChange=true"
+                      style="width: 80px;"></el-input>
+          </template>
+        </el-table-column>
+        <el-table-column label="最高购买数量" width="120px">
+          <template slot-scope="scope">
+            <el-input v-model="scope.row.maxNum"
+                      onkeyup="value=value.replace(/[^\d]/g,'').replace(/^0{1,}/g,'')"
+                      size="mini"
+                      maxlength="3"
+                      :disabled="!scope.row.isEdit"
+                      @change="isPriceChange=true"
+                      style="width: 80px;"></el-input>
+          </template>
+        </el-table-column>
         <el-table-column prop="" label="活动时间"  width="280px">
           <template slot-scope="scope">
             {{scope.row.startDate}}/{{scope.row.endDate}}
@@ -207,11 +229,11 @@
         for (let i=0; i< this.multipleSelection.length; i++) {
           activityArr.push(this.multipleSelection[i].mpId)
         }
-        mpIds = activityArr.join(",");
+      //  mpIds = activityArr.join(",");
         this.$confirm('确定要删除吗?', '提示', {
             type: 'warning'
           }).then(_ => {
-            API.batchRemove({mpIds: mpIds})
+            API.batchRemove({mpIds: activityArr})
             .then((res) => {
                 if (res.code == 0) {
                   this.initData();
@@ -260,6 +282,9 @@
             let base = process.env.API_ROOT
             console.log(base)
             let data = res.data.rows;
+            for(let i in data) {
+              data[i].isEdit = false;
+            }
             this.table.total = res.data.total;
             this.table.data = data;
           } else {
@@ -340,6 +365,55 @@
         document.execCommand("Copy"); // 执行浏览器复制命令
         this.$message.success("已成功复制到剪切板")
         oInput.remove()
+      },
+      // 点击编辑
+      handleRowEdit(item,index){
+        this.table.data[index].isEdit = true;
+      },
+      // 点击取消
+      handleRowCancel(item,index){
+        this.table.data[index].isEdit = false;
+      },
+      // 点击保存
+      handleRowSave(item,index) {
+        if(item.unitBidIncrement == "" ||  item.unitBidIncrement == 0) {
+          this.$message.error("请填写单体价");
+          return
+        }
+        if(item.chainBidIncrement == "" ||  item.chainBidIncrement == 0) {
+          this.$message.error("请填写连锁价");
+          return
+        }
+        if(item.commercialBidIncrement == "" ||  item.commercialBidIncrement == 0) {
+          this.$message.error("请填写商业价");
+          return
+        }
+        let supplierIds = []; // 选中的供应商id;
+        for(let i in item.supplierList) {
+          if(item.supplierList[i].selectFlag) {
+            supplierIds.push(item.supplierList[i].supplierId);
+          }
+        }
+        if(supplierIds.length <= 0) {
+          this.$message.error("请选择所属供应商");
+          return
+        }
+        let postData = {
+          "chainBidIncrement": item.chainBidIncrement,
+          "commercialBidIncrement": item.commercialBidIncrement,
+          "drugSkuId": item.drugSkuId,
+          "supplierIds":supplierIds,
+          "unitBidIncrement": item.unitBidIncrement
+        }
+        API.updateCommodityPrice(postData).then( (res) => {
+          if(res.code == 0) {
+            this.$message.success("操作成功");
+            this.table.currentPage = 1;
+            this.queryCommodityPriceList();
+          } else {
+            this.$message.error(res.msg)
+          }
+        })
       }
     }
   }
