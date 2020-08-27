@@ -169,7 +169,18 @@ export default {
        filters:{
         status:'',
         searchParam: '',
-        supplierName:''
+        supplierName:'',
+        mpStatus:'',
+        goodsNo:'',
+        drugNameLike:'',
+        drugCommonNameLike:'',
+        manufacturerLike:'',
+      },
+      table: {
+        data: [],
+        total: 0,
+        pageSize: 10,
+        currentPage: 1
       },
       selectionCommodity:[],
       rules: {
@@ -221,17 +232,17 @@ export default {
   },
   methods:{
     // 获取限购页详情
-    getPurchase(row){
-      if(row.mpId.length > 0)
-      {
-    //    this.rules.activeTime = [row.startDate,row.endDate]
-        this.editCommodityData.data.push(row);
-        this.editCommodityData.total = 1;
-        this.originCommodityData.data.push(row);
-        this.originCommodityData.total = 1;
-        //this.$message.error("修改"+row.drugCommonName);
-      }
-    },
+    // getPurchase(row){
+    //   if(row.mpId.length > 0)
+    //   {
+    // //    this.rules.activeTime = [row.startDate,row.endDate]
+    //     this.editCommodityData.data.push(row);
+    //     this.editCommodityData.total = 1;
+    //     this.originCommodityData.data.push(row);
+    //     this.originCommodityData.total = 1;
+    //     //this.$message.error("修改"+row.drugCommonName);
+    //   }
+    // },
     addPurchase(){
       API.getAddTemporaryId().then(res => {
         if (res.code == 0) {
@@ -269,12 +280,11 @@ export default {
           this.$message.error(res.msg);
         }
       })
-
     },
     clearFormData() {
       if(this.addTemporaryId.length > 0)
       {
-        API.cancelAdd(this.addTemporaryId).then(res => {
+        API.cancelAdd({temporaryId:this.addTemporaryId}).then(res => {
           if (res.code == 0) {
             let base = process.env.API_ROOT
             console.log(base)
@@ -296,7 +306,18 @@ export default {
     },
    // 搜索已添加的商品
     addSearchCommodityList(){
-      API.selectAddTemporaryList().then(res => {
+      let params = {
+        limit: this.table.pageSize,
+        page: this.table.currentPage,
+        sort: this.editCommodityData.sort,
+        order:this.editCommodityData.order,
+        goodsNo: this.filters.goodsNo,
+        drugNameLike: this.filters.drugName,
+        drugCommonNameLike: this.filters.drugCommonName,
+        manufacturerLike: this.filters.manufacturer,
+        temporaryId:this.addTemporaryId
+      }
+      API.selectAddTemporaryList(params).then(res => {
         if (res.code == 0) {
           let base = process.env.API_ROOT
           console.log(base)
@@ -509,6 +530,7 @@ export default {
      let data  = this.originCommodityData.data
       data = data.concat(val);
       this.addTemporaryCommodity(data)
+      this.addSearchCommodityList()
       this.addCommodityDialog = false;
       this.filters = {
         status:'',
@@ -532,6 +554,27 @@ export default {
           }
           params.commodityData = JSON.stringify(this.originCommodityData.data);
           params.activityType = params.activityType.join(",");
+          let editParams={}
+          for (let l = 0; l < this.editCommodityData.data.length; l++) {
+            editParams.endDateStr = params.activityEndTime
+            editParams.startDateStr = params.activityStartTime
+            editParams.maxNum = this.editCommodityData.data[l].maxNum
+            editParams.minNum = this.editCommodityData.data[l].minNum
+            editParams.mpId = this.editCommodityData.data[l].mpId
+            API.update(editParams).then((res) => {
+              this.loadingbtn = false;
+              if (res.code == 0) {
+                // this.clearDialog();
+                // this.$emit("closeDialog", 'update')
+                //  this.$message.success("操作成功");
+              } else {
+                this.$message.error(res.msg);
+                return;
+              }
+            }).catch(() => {
+              this.loadingbtn = false;
+            })
+          }
           if(this.addTemporaryId) {  // 新增
             params.temporaryId = this.addTemporaryId;
             API.saveTemporary({temporaryId:this.addTemporaryId}).then( (res) => {
@@ -547,26 +590,6 @@ export default {
               this.loadingbtn = false;
             })
           } else {
-            let editParams={}
-            for (let l = 0; l < this.editCommodityData.data.length; l++) {
-              editParams.endDateStr = this.editCommodityData.data[l].endDate
-              editParams.startDateStr = this.editCommodityData.data[l].startDate
-              editParams.maxNum = this.editCommodityData.data[l].maxNum
-              editParams.minNum = this.editCommodityData.data[l].minNum
-              editParams.mpId = this.editCommodityData.data[l].mpId
-              API.update(editParams).then((res) => {
-                this.loadingbtn = false;
-                if (res.code == 0) {
-                  this.clearDialog();
-                  this.$emit("closeDialog", 'update')
-                  this.$message.success("操作成功");
-                } else {
-                  this.$message.error(res.msg);
-                }
-              }).catch(() => {
-                this.loadingbtn = false;
-              })
-            }
           }
         }
       })

@@ -210,13 +210,13 @@
     methods: {
       // 添加限购页
       showAddPurchaseDialog(row){
-        if(row) {
-          this.$refs.purchaseAdd.getPurchase(row);
-        }
-        else
-        {
+        // if(row) {
+        //   this.$refs.purchaseAdd.getPurchase(row);
+        // }
+        // else
+        // {
           this.$refs.purchaseAdd.addPurchase();
-        }
+        // }
         this.dialogVisible = true;
       },
       // 删除专题页
