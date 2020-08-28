@@ -385,6 +385,7 @@
           API.update(editParams).then((res) => {
             if (res.code == 0) {
               this.$message.success("操作成功");
+              this.table.data[index].isEdit = false;
             } else {
               this.$message.error(res.msg);
             }
