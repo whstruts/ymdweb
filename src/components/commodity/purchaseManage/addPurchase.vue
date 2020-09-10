@@ -462,27 +462,37 @@ export default {
         this.$confirm('确认删除商品?', '提示', {
           type: 'warning'
         }).then(() => {
+          let activityArr = [], mpIds = "";
           for (let i = 0; i < dataLength; i++) {
             let data = this.selectionCommodity[i];
             let itemlength = this.editCommodityData.data.length;
-            let oitemlength = this.originCommodityData.data.length;
+            // let oitemlength = this.originCommodityData.data.length;
             for (let j = 0; j < itemlength; j++) {
               let item = this.editCommodityData.data[j];
-              if (data.commodityId == item.commodityId) {
-                console.log(data.commodityId == item.commodityId)
+              if (data.mpId == item.mpId) {
+                activityArr.push(item.mpId)
+                console.log(data.mpId == item.mpId)
                 this.editCommodityData.data.splice(j, 1);
                 break;
               }
             }
-
-            for (let k = 0; k < oitemlength; k++) {
-              let item = this.originCommodityData.data[k];
-              if (data.commodityId == item.commodityId) {
-                this.originCommodityData.data.splice(k, 1);
-                break;
-              }
-            }
+            // for (let k = 0; k < oitemlength; k++) {
+            //   let item = this.originCommodityData.data[k];
+            //   if (data.commodityId == item.commodityId) {
+            //     this.originCommodityData.data.splice(k, 1);
+            //     break;
+            //   }
+            // }
           }
+          API.batchRemove({mpIds: activityArr})
+            .then((res) => {
+                if (res.code == 0) {
+                  this.$message.success("删除成功");
+                } else {
+                  this.$message.error(res.msg);
+                }
+              }
+            )
           this.$refs.multipleTable.clearSelection();
           console.log(this.editCommodityData.data)
           this.editCommodityData.total = this.editCommodityData.data.length;
@@ -523,10 +533,11 @@ export default {
     },
     // 保存添加商品
     addCommoditySave(val){
-     let data  = this.originCommodityData.data
+     //let data  = this.originCommodityData.data
+      let data  = []
       data = data.concat(val);
       this.addTemporaryCommodity(data)
-      //this.addSearchCommodityList()
+      this.addSearchCommodityList()
       this.addCommodityDialog = false;
       this.filters = {
         status:'',
