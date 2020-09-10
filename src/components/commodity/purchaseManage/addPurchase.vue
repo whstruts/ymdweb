@@ -526,7 +526,7 @@ export default {
      let data  = this.originCommodityData.data
       data = data.concat(val);
       this.addTemporaryCommodity(data)
-      this.addSearchCommodityList()
+      //this.addSearchCommodityList()
       this.addCommodityDialog = false;
       this.filters = {
         status:'',
