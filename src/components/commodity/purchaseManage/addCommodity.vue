@@ -44,7 +44,7 @@
         @sort-change="tableDataSortChange"
         :default-sort = "{prop: 'drugSkuCode', order: 'desc'}">
        <el-table-column type="selection" width="45" align="center" :reserve-selection="true"></el-table-column>
-        <el-table-column label="供应商编码" prop="goodsNo" sortable width="120px"></el-table-column>
+        <el-table-column label="供应商编码" prop="goodsSn" sortable width="120px"></el-table-column>
         <el-table-column label="商品名" prop="drugName" sortable width="150px"></el-table-column>
         <el-table-column label="通用名" prop="drugCommonName" sortable width="150px"></el-table-column>
         <el-table-column label="规格" prop="specifications" width="120px"></el-table-column>
