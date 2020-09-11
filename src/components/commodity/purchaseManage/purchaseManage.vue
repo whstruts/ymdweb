@@ -28,15 +28,15 @@
         </p>
         <p>
           <span class="search_hint">商品名</span>
-          <el-input v-model="filters.drugName" clearable placeholder="" size="mini" @keyup.enter.native="handleSearch"> </el-input>
+          <el-input v-model="filters.drugNameLike" clearable placeholder="" size="mini" @keyup.enter.native="handleSearch"> </el-input>
         </p>
         <p>
           <span class="search_hint">通用名</span>
-          <el-input v-model="filters.drugCommonName" clearable placeholder="" size="mini" @keyup.enter.native="handleSearch"> </el-input>
+          <el-input v-model="filters.drugCommonNameLike" clearable placeholder="" size="mini" @keyup.enter.native="handleSearch"> </el-input>
         </p>
         <p>
           <span class="search_hint">厂家</span>
-          <el-input v-model="filters.manufacturer" clearable placeholder="" size="mini" @keyup.enter.native="handleSearch"> </el-input>
+          <el-input v-model="filters.manufacturerLike" clearable placeholder="" size="mini" @keyup.enter.native="handleSearch"> </el-input>
         </p>
         <p>
           <span class="search_hint">活动时间</span>
@@ -83,9 +83,9 @@
           <template slot-scope="scope">
             <div class="table_setting_button" >
 <!--              <el-button type="primary" plain size="mini" v-if="$utils.checkButton('topicManage:edit:topic')" @click.stop="showAddPurchaseDialog(scope.row)">编辑</el-button>-->
-              <el-button type="primary" plain size="mini" v-if="$utils.checkButton('platformPrice:edit:commodity') && !scope.row.isEdit" @click="handleRowEdit(scope.row, scope.$index)">编辑</el-button>
-              <el-button  plain size="mini" v-if="$utils.checkButton('platformPrice:edit:commodity') && scope.row.isEdit" @click="handleRowCancel(scope.row, scope.$index)">取消</el-button>
-              <el-button  type="primary" plain size="mini" v-if="$utils.checkButton('platformPrice:edit:commodity') && scope.row.isEdit" @click="handleRowSave(scope.row, scope.$index)">保存</el-button>
+              <el-button type="primary" plain size="mini" v-if="$utils.checkButton('purchaseManage:edit:topic') && !scope.row.isEdit" @click="handleRowEdit(scope.row, scope.$index)">编辑</el-button>
+              <el-button  plain size="mini" v-if="$utils.checkButton('purchaseManage:edit:topic') && scope.row.isEdit" @click="handleRowCancel(scope.row, scope.$index)">取消</el-button>
+              <el-button  type="primary" plain size="mini" v-if="$utils.checkButton('purchaseManage:edit:topic') && scope.row.isEdit" @click="handleRowSave(scope.row, scope.$index)">保存</el-button>
             </div>
           </template>
         </el-table-column>
@@ -170,9 +170,9 @@
         filters: {
           activityStatus: '',
           goodsSn:'',
-          drugName:'',
-          drugCommonName:'',
-          manufacturer:'',
+          drugNameLike:'',
+          drugCommonNameLike:'',
+          manufacturerLike:'',
           activityTime:'',
           updateTime:''
         },
@@ -273,9 +273,9 @@
           limit: this.table.pageSize,
           mpStatus: this.filters.mpStatus,
           goodsSn: this.filters.goodsSn,
-          drugName: this.filters.drugName,
-          drugCommonName: this.filters.drugCommonName,
-          manufacturer: this.filters.manufacturer,
+          drugNameLike: this.filters.drugNameLike,
+          drugCommonNameLike: this.filters.drugCommonNameLike,
+          manufacturerLike: this.filters.manufacturerLike,
         }
         API.list(params).then(res => {
           if (res.code == 0) {
