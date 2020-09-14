@@ -97,6 +97,10 @@ export default {
   resetPassword: params => {
     return API.PUT('/api-usercenter/partner/resetPassword', params)
   },
+  //删除合伙人
+  deleteSuppliser: params => {
+    return API.DELETE('/api-usercenter/partner', params)
+  },
   //修改合伙人
   editPartner: params => {
     return API.PUT('/api-usercenter/partner', params)

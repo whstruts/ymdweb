@@ -84,7 +84,7 @@
       >
         <el-table-column label=" " type="index" width="40" align="center"></el-table-column>
         <!--<el-table-column type="selection" width="45" align="center"></el-table-column>-->
-        <el-table-column label="操作" min-width="264px">
+        <el-table-column label="操作" min-width="324px">
           <template slot-scope="scope">
             <div class="table_setting_button">
               <el-button type="primary" plain size="mini" v-if="$utils.checkButton('supplier:edit:partner')"
@@ -100,6 +100,9 @@
               </el-button>
               <el-button plain size="mini" v-if="$utils.checkButton('supplier:reset:pwd')"
                          @click.stop="resetPwd(scope.row)">重置密码
+              </el-button>
+              <el-button plain size="mini" v-if="$utils.checkButton('supplier:delete')"
+                         @click.stop="deleteSuppliser(scope.row)">删除
               </el-button>
             </div>
           </template>
@@ -743,6 +746,22 @@
           type: 'warning'
         }).then(() => {
           API.resetPassword({partnerId: val.partnerId}).then(res => {
+            if (res.code == 0) {
+              this.$message.success(res.msg)
+            } else {
+              this.$message.error(res.msg)
+            }
+          })
+        }).catch(() => {
+        });
+
+      },
+      //删除合伙人
+      deleteSuppliser(val) {
+        this.$confirm('确定删除合伙人？', '提示', {
+          type: 'warning'
+        }).then(() => {
+          API.deleteSuppliser({partnerId: val.partnerId}).then(res => {
             if (res.code == 0) {
               this.$message.success(res.msg)
             } else {
